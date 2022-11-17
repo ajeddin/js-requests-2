@@ -2,6 +2,7 @@
 //THE TEST SERVER IS RUNNING ON LOCALHOST:3000//
 ////////////////////////////////////////////////
 
+
 // PROBLEM 1
 /*
     In the index.html file in this folder there is a button with an id of 'say-hello-button'!
@@ -10,7 +11,7 @@
 */
 
 // CODE HERE
-
+let sayHelloButton = document.querySelector('#say-hello-button')
 
 // PROBLEM 2
 /*
@@ -20,19 +21,27 @@
 */
 
 // CODE HERE
-
-
+function changeHelloButton(){
+    sayHelloButton.style.color = 'white'
+    sayHelloButton.style.backgroundColor = 'black'
+}
+sayHelloButton.addEventListener('mouseover',changeHelloButton)
 // PROBLEM 3
 /*
-    Now you can see that the button colors change, but they do not change back when we take the mouse off of the button.
+Now you can see that the button colors change, but they do not change back when we take the mouse off of the button.
 
-    Write another function that changes the button back to its original colors. #EFEFEF for the background and black for the text.
+Write another function that changes the button back to its original colors. #EFEFEF for the background and black for the text.
 
-    Attach another listener that fires your second function when the mouseout event occurs on the button
+Attach another listener that fires your second function when the mouseout event occurs on the button
 */
 
 // CODE HERE
 
+function changeBackHelloButton(){
+    sayHelloButton.style.color = 'black'
+    sayHelloButton.style.backgroundColor = '#EFEFEF'
+}
+sayHelloButton.addEventListener('mouseout',changeBackHelloButton)
 
 // PROBLEM 4
 /*
@@ -53,8 +62,7 @@ const sayHello = () => {
 // DO NOT EDIT FUNCTION
 
 // CODE HERE
-
-
+sayHelloButton.addEventListener('click', sayHello)
 // PROBLEM 5 
 /*
     Now that we have attached a few event listeners why dont we try adding a request? 
@@ -65,12 +73,21 @@ const sayHello = () => {
     
     Handle the promise that's returned with a .then, which you should pass a callback function to. Inside the callback function, console.log the response's data (in the intermediate instructions we'll come back to this function and add HTML).
 */ 
-
+// On each iteration of the loop, create a new p element. Set its textContent equal the string at the current index (i) and then append the new p element onto the document's body. 
 const ohMy = () => {
-    // YOUR CODE HERE
+    axios.get('http://localhost:3000/animals')
+    .then(res => {
+        for(i=0;i<res.data.length;i++){
+            const para = document.createElement("p");
+            para.textContent=res.data[i]
+            document.body.appendChild(para)
+        }
+    })
+    .catch(err => console.log(err))
 }
 
 document.getElementById('animals-button').addEventListener('click', ohMy)
+
 
 
 // PROBLEM 6 
@@ -85,10 +102,17 @@ document.getElementById('animals-button').addEventListener('click', ohMy)
     
     We'll be updating this function in the next problem.
 */
-
+let repeatButton = document.querySelector('#repeat-button')
 const repeatMyParam = () => {
-    //YOUR CODE HERE
+    let repeatText = document.querySelector('#repeat-text')
+    axios.get(`http://localhost:3000/repeat/param`)
+.then(res=> {
+    console.log(res.data)
+    repeatText.textContent= res.data})
+.catch(err => console.log(err))
+repeatText.style.display = 'block'
 }
+repeatButton.addEventListener('click',repeatMyParam)
 
 // PROBLEM 7
 /*
@@ -113,8 +137,13 @@ const repeatMyParam = () => {
 */
 
 // CODE HERE
-
-
+function getQuery(){
+    axios.get('http://localhost:3000/query-test?name=koreyonquery-test?hi=abdul')
+    .then(res => console.log(res)) 
+    .catch(err => console.log(err)) 
+}
+getQueryBtn= document.querySelector('#query-button')
+getQueryBtn.addEventListener('click', getQuery)
 
 ////////////////
 //INTERMEDIATE//
@@ -156,7 +185,7 @@ const repeatMyParam = () => {
     
     Inside the function, select the input you just created in the HTML and save it to a variable called foodInput. 
     
-    Next, create an object called body inside the function. It should have one key-value pair. The key should be newFood (make sure to match the case and spelling exactly) and the value should be the value of the food input. 
+    Next, create an object called body inside the function. It should have one key-data pair. The key should be newFood (make sure to match the case and spelling exactly) and the data should be the data of the food input. 
 
     Now make an axios post request to /food. Inside the parentheses where you passed the URL in, pass in body as the second argument. 
 
